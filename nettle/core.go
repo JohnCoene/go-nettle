@@ -1,7 +1,6 @@
 package nettle
 
 import (
-	"go-nettle/nettle"
 	"math"
 )
 
