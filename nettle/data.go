@@ -1,16 +1,18 @@
 package nettle
 
+import "math/rand"
+
 // Edge A set of edges
 type Edge struct {
-	source string
-	target string
+	Source string
+	Target string
 }
 
 // NodeLayout Nettle node with position and displacement
 type NodeLayout struct {
 	id   string
-	x    int
-	y    int
+	x    float64
+	y    float64
 	disp float64
 }
 
@@ -34,8 +36,8 @@ func (g Graph) CreateGraph() GraphLayout {
 	for _, n := range g.Nodes {
 		nl := NodeLayout{
 			id:   n,
-			x:    0,
-			y:    0,
+			x:    rand.Float64(),
+			y:    rand.Float64(),
 			disp: 0,
 		}
 		nodes = append(nodes, nl)

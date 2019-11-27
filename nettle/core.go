@@ -12,18 +12,26 @@ func fr(x, k float64) float64 {
 	return (k * k) / x
 }
 
-func findNodes(edge Edge, nodes []NodeLayout) (nettle.NodeLayout, nettle.NodeLayout) {
-	var found int = 0
+func distance(minX, maxX, minY, maxY float64) float64 {
+	xDiff := minX - maxX
+	yDiff := minY - maxY
+	diff := float64(((xDiff * xDiff) + (yDiff * yDiff)))
+	return math.Sqrt(diff)
+}
+
+func findNodes(edge Edge, nodes []NodeLayout) (NodeLayout, NodeLayout, int, int) {
+	var found, srcid, tgtid int
+	var src, tgt NodeLayout
 	for _, n := range nodes {
 
-		if n.id == edge.source {
+		if n.id == edge.Source {
 			found = found + 1
-			src := n
+			src = n
 		}
 
-		if n.id == edge.target {
+		if n.id == edge.Target {
 			found = found + 1
-			tgt := n
+			tgt = n
 		}
 
 		if found == 2 {
@@ -32,18 +40,11 @@ func findNodes(edge Edge, nodes []NodeLayout) (nettle.NodeLayout, nettle.NodeLay
 
 	}
 
-	return src, tgt
-}
-
-func distance(x1, x2, y1, y2, float64) float64 {
-	xDiff := x1 - x2
-	yDiff := y1 - y2
-	diff := float64(((xDiff * xDiff) + (yDiff * yDiff)))
-	return math.Sqrt(diff)
+	return src, tgt, srcid, tgtid
 }
 
 // Layout Compute graph layout
-func Layout(W, L, iter int, g GraphLayout) int {
+func Layout(W, L, iter int, t float64, g GraphLayout) GraphLayout {
 
 	nNodes := float64(len(g.Nodes))
 	area := float64((W * L))
@@ -64,13 +65,23 @@ func Layout(W, L, iter int, g GraphLayout) int {
 		}
 
 		for _, e := range g.Edges {
-			source, target := findNodes(e, g.Nodes)
+			source, target, srcid, tgtid := findNodes(e, g.Nodes)
 			d := distance(source.x, target.x, source.y, target.y)
 			source.disp = source.disp - (d/math.Abs(d))*fa(math.Abs(d), k)
 			target.disp = target.disp - (d/math.Abs(d))*fa(math.Abs(d), k)
+			g.Nodes[srcid].disp = source.disp
+			g.Nodes[tgtid].disp = target.disp
+		}
+
+		for _, n := range g.Nodes {
+			minDisp := float64(math.Min(n.disp, t))
+			n.x = n.x + (n.disp/math.Abs(n.disp))*minDisp
+			n.y = n.y + (n.disp/math.Abs(n.disp))*minDisp
+			n.x = math.Min(float64(W/2), math.Max(float64(-W/2), n.x))
+			n.y = math.Min(float64(L/2), math.Max(float64(-L/2), n.y))
 		}
 
 	}
 
-	return 0
+	return g
 }
