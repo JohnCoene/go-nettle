@@ -1,5 +1,7 @@
 # go-nettle
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/JohnCoene/go-nettle)](https://goreportcard.com/report/github.com/JohnCoene/go-nettle) 
+
 A foray into graph layout algorithms with golang. Implements the Barycentric Method described [here](http://cs.brown.edu/people/rtamassi/gdhandbook/chapters/force-directed.pdf). 
 
 ## Install
