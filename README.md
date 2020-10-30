@@ -7,7 +7,7 @@ A foray into graph layout algorithms with golang. Implements the Barycentric Met
 ## Install
 
 ```bash
-go get github.com/go-nettle/nettle
+go get github.com/JohnCoene/go-nettle/nettle
 ```
 
 ## Example
